@@ -17,6 +17,12 @@
 #import "UIView+React.h"
 #endif
 
+#if __has_include(<React/RCTAssert.h>)
+#import <React/RCTViewManager.h>
+#else
+#import "RCTViewManager.h"
+#endif
+
 
 @class RCTEventDispatcher;
 
@@ -25,6 +31,7 @@ NS_CLASS_AVAILABLE_IOS(11_0) @interface RCTPdfView : UIView <UIGestureRecognizer
 @property(nonatomic, strong) NSString *path;
 @property(nonatomic) int page;
 @property(nonatomic) float scale;
+@property(nonatomic, strong) NSDictionary *goTo;
 @property(nonatomic) float minScale;
 @property(nonatomic) float maxScale;
 @property(nonatomic) BOOL horizontal;

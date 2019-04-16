@@ -55,6 +55,7 @@ const float MIN_SCALE = 1.0f;
         
         _page = 1;
         _scale = 1;
+        _goTo = NULL;
         _minScale = MIN_SCALE;
         _maxScale = MAX_SCALE;
         _horizontal = NO;
@@ -240,6 +241,17 @@ const float MIN_SCALE = 1.0f;
         
         [_pdfView layoutDocumentView];
         [self setNeedsDisplay];
+
+        if (_pdfDocument && [changedProps containsObject:@"goTo"]) {
+            NSUInteger pageIndex = [RCTConvert NSUInteger:_goTo[@"page"]];
+            CGFloat x = [RCTConvert CGFloat:_goTo[@"x"]];
+            CGFloat y = [RCTConvert CGFloat:_goTo[@"y"]];
+            CGFloat width = [RCTConvert CGFloat:_goTo[@"width"]];
+            CGFloat height = [RCTConvert CGFloat:_goTo[@"height"]];
+            CGRect rect = CGRectMake(x, y, width, height);
+            PDFPage *p = [_pdfDocument pageAtIndex:pageIndex];
+            [_pdfView goToRect:rect onPage:p];
+        }
     }
 }
 
