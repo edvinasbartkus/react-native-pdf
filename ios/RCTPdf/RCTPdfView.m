@@ -244,13 +244,18 @@ const float MIN_SCALE = 1.0f;
 
         if (_pdfDocument && [changedProps containsObject:@"goTo"]) {
             NSUInteger pageIndex = [RCTConvert NSUInteger:_goTo[@"page"]];
+            PDFPage *page = [_pdfDocument pageAtIndex:pageIndex];
+            
+            CGFloat pageWidth = CGPDFPageGetBoxRect(page.pageRef, kCGPDFMediaBox).size.width;
+            CGFloat pageHeight = CGPDFPageGetBoxRect(page.pageRef, kCGPDFMediaBox).size.height;
+
             CGFloat x = [RCTConvert CGFloat:_goTo[@"x"]];
             CGFloat y = [RCTConvert CGFloat:_goTo[@"y"]];
             CGFloat width = [RCTConvert CGFloat:_goTo[@"width"]];
             CGFloat height = [RCTConvert CGFloat:_goTo[@"height"]];
-            CGRect rect = CGRectMake(x, y, width, height);
-            PDFPage *p = [_pdfDocument pageAtIndex:pageIndex];
-            [_pdfView goToRect:rect onPage:p];
+            CGRect rect = CGRectMake(pageWidth * x, pageHeight * y, width, height);
+            
+            [_pdfView goToRect:rect onPage:page];
         }
     }
 }
